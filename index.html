@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Epilogue:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--w:#fff;--b:#0A0A0A;--b2:#141414;--b3:#1e1e1e;
+--bl:#2563EB;--bl2:#1d4ed8;--bll:#EFF4FF;
+--or:#F97316;--or2:#ea6c0a;--orl:#FFF4ED;
+--g50:#f9f9f9;--g100:#f2f2f2;--g150:#ebebeb;--g200:#e0e0e0;--g300:#c7c7c7;--g400:#a0a0a0;--g500:#737373;--g600:#525252;--g700:#383838;--g800:#222;--g900:#111;
+--ff:'Fraunces',serif;--fb:'Epilogue',sans-serif;
+--r8:8px;--r12:12px;--r16:16px;--r20:20px;--r24:24px;--r32:32px;
+--sh1:0 1px 4px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
+--sh2:0 4px 20px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
+--sh3:0 12px 40px rgba(0,0,0,.12),0 4px 16px rgba(0,0,0,.06);
+--shbl:0 8px 24px rgba(37,99,235,.25);
+--shor:0 8px 24px rgba(249,115,22,.25);
+--ease:cubic-bezier(.22,1,.36,1);
+}
+html{scroll-behavior:smooth;font-size:16px;overflow-x:hidden}
+body{font-family:var(--fb);background:var(--w);color:var(--b);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}button{cursor:pointer;border:none;background:none;font-family:inherit}
+img{max-width:100%;display:block}input,select,textarea{font-family:inherit}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@keyframes floatA{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@keyframes floatB{0%,100%{transform:translateY(0) rotate(1deg)}50%{transform:translateY(-8px) rotate(-1deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes drawLine{from{width:0}to{width:100%}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.anim-fu{animation:fadeUp .6s var(--ease) both}
+.anim-fu-1{animation:fadeUp .6s var(--ease) .1s both}
+.anim-fu-2{animation:fadeUp .6s var(--ease) .2s both}
+.anim-fu-3{animation:fadeUp .6s var(--ease) .3s both}
+.anim-fu-4{animation:fadeUp .6s var(--ease) .4s both}
+.anim-sl{animation:slideRight .6s var(--ease) both}
+.anim-fi{animation:fadeIn .5s var(--ease) both}
+.anim-sc{animation:scaleIn .5s var(--ease) both}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-1{transition-delay:.1s}.reveal-2{transition-delay:.15s}.reveal-3{transition-delay:.2s}.reveal-4{transition-delay:.25s}.reveal-5{transition-delay:.3s}.reveal-6{transition-delay:.35s}
+.page-enter{animation:fadeUp .4s var(--ease) both}
+
+/* ─── TICKER ─── */
+.ticker{background:var(--b);color:rgba(255,255,255,.75);font-size:.7rem;font-weight:500;letter-spacing:.05em;padding:8px 0;overflow:hidden;position:relative;z-index:1001}
+.ticker-track{display:flex;gap:48px;white-space:nowrap;animation:marquee 20s linear infinite}
+.ticker-item{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--or);flex-shrink:0}
+
+/* ─── NAV ─── */
+.nav{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,0,0,.07);transition:box-shadow .3s}
+.nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.08)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.nav-logo-img{height:36px;width:auto;object-fit:contain}
+.nav-logo-fallback{display:flex;align-items:center;gap:10px}
+.nav-logo-mark{width:36px;height:36px;background:var(--b);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:.75rem;font-weight:800;letter-spacing:-.01em;font-family:var(--ff);flex-shrink:0}
+.nav-logo-mark em{color:var(--or);font-style:normal}
+.nav-logo-text{font-family:var(--ff);font-size:1.2rem;font-weight:700;color:var(--b);letter-spacing:-.03em}
+.nav-logo-text em{font-style:italic;color:var(--or)}
+.nav-center{display:flex;align-items:center;gap:2px}
+.nav-lk{position:relative;padding:8px 14px;font-size:.875rem;font-weight:500;color:var(--g500);cursor:pointer;border-radius:var(--r8);transition:color .2s,background .2s;letter-spacing:-.01em}
+.nav-lk::after{content:'';position:absolute;bottom:4px;left:14px;right:14px;height:2px;background:var(--or);border-radius:2px;transform:scaleX(0);transition:transform .25s var(--ease);transform-origin:left}
+.nav-lk:hover{color:var(--b);background:var(--g50)}
+.nav-lk.active{color:var(--b);font-weight:600}
+.nav-lk.active::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-wa-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--g150);border-radius:var(--r8);font-size:.8125rem;font-weight:500;color:var(--g600);transition:all .2s;cursor:pointer}
+.nav-wa-btn:hover{border-color:var(--g300);color:var(--b);background:var(--g50)}
+.nav-cta{padding:9px 20px;background:var(--or);color:white;border-radius:var(--r8);font-size:.8125rem;font-weight:700;transition:all .25s;cursor:pointer;letter-spacing:.01em}
+.nav-cta:hover{background:var(--or2);transform:translateY(-1px);box-shadow:var(--shor)}
+.ham{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer;border-radius:var(--r8);transition:background .2s}
+.ham:hover{background:var(--g100)}
+.ham span{display:block;width:20px;height:1.5px;background:var(--b);border-radius:2px;transition:all .3s var(--ease)}
+.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mob-menu{display:none;position:fixed;top:109px;left:0;right:0;bottom:0;background:white;z-index:999;flex-direction:column;padding:16px 20px;overflow-y:auto;animation:slideDown .3s var(--ease)}
+.mob-menu.open{display:flex}
+.mob-lk{padding:14px 16px;border-radius:var(--r12);font-size:1rem;font-weight:500;color:var(--g700);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:space-between}
+.mob-lk:hover,.mob-lk.active{background:var(--g50);color:var(--b)}
+.mob-lk.active{font-weight:700}
+.mob-divider{height:1px;background:var(--g100);margin:12px 0}
+.mob-cta{margin-top:8px;padding:16px;background:var(--or);color:white;border-radius:var(--r16);font-size:1rem;font-weight:700;text-align:center;cursor:pointer}
+.mob-wa{margin-top:10px;padding:14px;background:var(--g50);border:1.5px solid var(--g150);color:var(--b);border-radius:var(--r16);font-size:.9375rem;font-weight:500;text-align:center;cursor:pointer}
+
+/* ─── CONTAINERS ─── */
+.ct{max-width:1280px;margin:0 auto;padding:0 24px}
+.ct-sm{max-width:960px;margin:0 auto;padding:0 24px}
+.sec{padding:96px 0}.sec-sm{padding:64px 0}
+@media(max-width:768px){.sec{padding:60px 0}.sec-sm{padding:40px 0}}
+
+/* ─── EYEBROW ─── */
+.ey{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--or);margin-bottom:14px}
+.ey::before{content:'';width:18px;height:2px;background:var(--or);border-radius:2px;flex-shrink:0}
+.ey-b{color:var(--g400)}.ey-b::before{background:var(--g400)}
+
+/* ─── HERO ─── */
+.hero{padding:72px 0 80px;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;top:-120px;right:-120px;width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,.06) 0%,transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 520px;gap:48px;align-items:center}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--g50);border:1px solid var(--g150);border-radius:20px;font-size:.75rem;font-weight:600;color:var(--g600);margin-bottom:24px}
+.hero-tag-dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}
+.h1{font-family:var(--ff);font-size:clamp(2.8rem,5.5vw,4.5rem);font-weight:800;line-height:1.08;letter-spacing:-.045em;color:var(--b);margin-bottom:24px}
+.h1 em{font-style:italic;color:var(--or)}
+.h2{font-family:var(--ff);font-size:clamp(1.8rem,3vw,2.75rem);font-weight:700;letter-spacing:-.04em;color:var(--b);margin-bottom:16px;line-height:1.15}
+.h3{font-family:var(--ff);font-size:1.25rem;font-weight:700;letter-spacing:-.025em;color:var(--b);margin-bottom:10px}
+.sub{font-size:1.0625rem;color:var(--g500);line-height:1.75;max-width:460px;margin-bottom:40px}
+.hero-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-p{padding:14px 28px;background:var(--b);color:white;border-radius:var(--r12);font-size:.9375rem;font-weight:700;letter-spacing:-.01em;transition:all .25s var(--ease);cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:2px solid transparent}
+.btn-p:hover{background:var(--b2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.2)}
+.btn-or{background:var(--or);color:white}
+.btn-or:hover{background:var(--or2);box-shadow:var(--shor)}
+.btn-s{padding:14px 28px;background:transparent;color:var(--b);border-radius:var(--r12);font-size:.9375rem;font-weight:500;letter-spacing:-.01em;border:1.5px solid var(--g200);transition:all .2s;cursor:pointer}
+.btn-s:hover{border-color:var(--g400);background:var(--g50)}
+.btn-wa{padding:14px 28px;background:#25D366;color:white;border-radius:var(--r12);font-size:.9375rem;font-weight:700;transition:all .25s;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn-wa:hover{background:#20bb59;transform:translateY(-2px);box-shadow:0 12px 32px rgba(37,211,102,.3)}
+.btn-full{width:100%;justify-content:center}
+.hero-stats{display:flex;gap:36px;margin-top:44px;padding-top:36px;border-top:1px solid var(--g150)}
+.stat-n{font-family:var(--ff);font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--b)}
+.stat-l{font-size:.75rem;color:var(--g400);margin-top:2px;font-weight:500}
+
+/* ─── HERO VISUAL ─── */
+.hero-vis{position:relative;height:520px;display:flex;align-items:center;justify-content:center}
+.hero-phone{position:relative;z-index:3;animation:floatA 6s ease-in-out infinite}
+.hero-phone-wrap{width:220px;height:440px;border-radius:44px;background:var(--b);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.35),0 0 0 2px rgba(255,255,255,.08) inset;position:relative}
+.hero-phone-inner{width:100%;height:100%;object-fit:cover;display:block}
+.hero-phone-bar{position:absolute;top:0;left:0;right:0;padding:12px 16px;background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent);display:flex;align-items:center;justify-content:space-between}
+.hero-phone-bar-ico{font-size:.65rem;color:rgba(255,255,255,.8)}
+.hero-pill{position:absolute;background:white;border-radius:var(--r16);padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh3);z-index:4}
+.hero-pill-1{top:48px;right:-16px;animation:floatB 5s ease-in-out infinite}
+.hero-pill-2{bottom:72px;left:-20px;animation:floatA 5.5s ease-in-out infinite 1s}
+.hero-pill-3{top:48%;left:-28px;transform:translateY(-50%);animation:floatB 5s ease-in-out infinite 2s}
+.hero-pill-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.hero-pill-t{font-size:.72rem;font-weight:700;color:var(--b);line-height:1.2}
+.hero-pill-s{font-size:.62rem;color:var(--g400);margin-top:1px}
+.hero-bg-circle{position:absolute;border-radius:50%;z-index:1}
+.hero-bg-c1{width:360px;height:360px;background:var(--g50);top:50%;left:50%;transform:translate(-50%,-50%)}
+.hero-bg-c2{width:240px;height:240px;border:1.5px solid var(--g100);top:50%;left:50%;transform:translate(-50%,-50%)}
+
+/* ─── CATEGORIES ─── */
+.cat-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.cat-crd{border-radius:var(--r24);overflow:hidden;cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s var(--ease);position:relative}
+.cat-crd:hover{transform:translateY(-6px);box-shadow:var(--sh3)}
+.cat-bg{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;transition:transform .5s var(--ease)}
+.cat-crd:hover .cat-bg{transform:scale(1.04)}
+.cat-ov{position:absolute;inset:0;background:linear-gradient(160deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,.3) 100%)}
+.cat-cnt{position:relative;z-index:2;height:300px;display:flex;flex-direction:column;justify-content:flex-end;padding:32px}
+.cat-em{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
+.cat-t{font-family:var(--ff);font-size:2rem;font-weight:800;color:white;letter-spacing:-.04em;line-height:1.1}
+.cat-s{font-size:.85rem;color:rgba(255,255,255,.55);margin:6px 0 20px}
+.cat-b{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:white;color:var(--b);border-radius:var(--r8);font-size:.8rem;font-weight:700;transition:background .2s,gap .2s;width:fit-content}
+.cat-crd:hover .cat-b{gap:10px;background:var(--or);color:white}
+
+/* ─── PHONE CARDS ─── */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:48px}
+.pcrd{background:white;border:1px solid var(--g150);border-radius:var(--r20);overflow:hidden;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s}
+.pcrd:hover{transform:translateY(-5px);box-shadow:var(--sh3);border-color:var(--g200)}
+.pcrd-img{height:220px;background:var(--g50);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.pcrd-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.pcrd:hover .pcrd-img img{transform:scale(1.06)}
+.pcrd-img-fallback{font-size:5rem;line-height:1}
+.pcrd-body{padding:16px 20px 20px}
+.pcrd-tags{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tg{font-size:.63rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.tg-br{background:var(--g100);color:var(--g600)}
+.tg-nw{background:#dcfce7;color:#166534}
+.tg-gd{background:#dbeafe;color:#1e40af}
+.tg-fr{background:#fef9c3;color:#854d0e}
+.pcrd-n{font-family:var(--ff);font-size:.9375rem;font-weight:700;color:var(--b);margin-bottom:4px;line-height:1.3;letter-spacing:-.02em}
+.pcrd-sp{font-size:.78rem;color:var(--g400);margin-bottom:16px;line-height:1.6}
+.pcrd-ft{display:flex;justify-content:space-between;align-items:center}
+.prc{font-family:var(--ff);font-size:1.2rem;font-weight:800;color:var(--b);letter-spacing:-.03em}
+.prc sup{font-size:.75em;vertical-align:super;font-weight:700}
+.wa-b{width:38px;height:38px;background:#25D366;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0;font-size:1rem}
+.wa-b:hover{background:#20bb59;transform:scale(1.06)}
+
+/* ─── WHY ─── */
+.why-g{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+.why-c{padding:32px;border-radius:var(--r20);border:1px solid var(--g100);transition:all .3s var(--ease);cursor:default;position:relative;overflow:hidden}
+.why-c::before{content:'';position:absolute;inset:0;background:var(--g50);opacity:0;transition:opacity .3s}
+.why-c:hover{border-color:var(--g200);box-shadow:var(--sh2);transform:translateY(-3px)}
+.why-c:hover::before{opacity:1}
+.why-ic{width:52px;height:52px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:20px;position:relative;z-index:1}
+.why-ic-bl{background:var(--bll)}
+.why-ic-or{background:var(--orl)}
+.why-ic-dk{background:var(--g100)}
+.why-t{font-family:var(--ff);font-size:1rem;font-weight:700;margin-bottom:10px;letter-spacing:-.02em;position:relative;z-index:1}
+.why-d{font-size:.875rem;color:var(--g500);line-height:1.7;position:relative;z-index:1}
+
+/* ─── WA CTA ─── */
+.wa-sec{background:var(--b);border-radius:var(--r32);padding:72px 64px;text-align:center;position:relative;overflow:hidden;margin:0 24px}
+.wa-sec::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(249,115,22,.08);top:-100px;left:-100px}
+.wa-sec::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(37,99,235,.06);bottom:-150px;right:-100px}
+.wa-sec-t{font-family:var(--ff);font-size:clamp(2rem,4vw,3rem);font-weight:800;color:white;margin-bottom:16px;position:relative;z-index:1;letter-spacing:-.04em}
+.wa-sec-s{color:rgba(255,255,255,.45);font-size:1rem;margin-bottom:40px;position:relative;z-index:1;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7}
+.wa-sec .btn-wa{position:relative;z-index:1;margin:0 auto;font-size:1rem;padding:16px 32px}
+
+/* ─── SECTION HEADERS ─── */
+.sh{text-align:center;max-width:560px;margin:0 auto}
+.sh-l{max-width:600px;margin:0}
+.sh-l .h2{text-align:left}
+.sh-l .sub{text-align:left}
+.sh-flex{display:flex;align-items:flex-end;justify-content:space-between}
+
+/* ─── FOOTER ─── */
+.ft{background:var(--g900);color:white;padding:64px 0 32px}
+.ft-g{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.ft-br{font-family:var(--ff);font-size:1.25rem;font-weight:800;margin-bottom:12px;letter-spacing:-.03em}
+.ft-br em{font-style:italic;color:var(--or)}
+.ft-d{font-size:.875rem;color:rgba(255,255,255,.35);line-height:1.75;max-width:260px}
+.ft-h{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px}
+.ft-ls{display:flex;flex-direction:column;gap:10px}
+.ft-lk{font-size:.875rem;color:rgba(255,255,255,.5);cursor:pointer;transition:color .2s}
+.ft-lk:hover{color:white}
+.ft-bot{border-top:1px solid rgba(255,255,255,.07);padding-top:28px;display:flex;justify-content:space-between;align-items:center}
+.ft-cp{font-size:.75rem;color:rgba(255,255,255,.25)}
+.ft-cp em{color:var(--or);font-style:normal}
+.ft-badges{display:flex;gap:8px}
+.ft-badge{padding:4px 12px;border:1px solid rgba(255,255,255,.1);border-radius:20px;font-size:.65rem;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.05em;text-transform:uppercase}
+
+/* ─── SHOP ─── */
+.shop-pg-hero{padding:56px 0 40px;border-bottom:1px solid var(--g100)}
+.s-cats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+.scat{border:1.5px solid var(--g150);border-radius:var(--r16);padding:24px 28px;cursor:pointer;transition:all .3s var(--ease);display:flex;align-items:center;justify-content:space-between;background:white}
+.scat:hover{border-color:var(--b);background:var(--g50);transform:translateY(-2px);box-shadow:var(--sh2)}
+.scat.act{border-color:var(--b);background:var(--b)}
+.scat.act .scat-t{color:white}.scat.act .scat-s{color:rgba(255,255,255,.45)}.scat.act .scat-ar{background:rgba(255,255,255,.15);color:white}
+.scat-em{font-size:1.75rem;margin-bottom:6px}
+.scat-t{font-family:var(--ff);font-size:1.15rem;font-weight:700;color:var(--b);letter-spacing:-.02em}
+.scat-s{font-size:.78rem;color:var(--g400);margin-top:2px}
+.scat-ar{width:38px;height:38px;border-radius:50%;background:var(--g100);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:.9rem}
+
+/* FILTERS */
+.sl{display:grid;grid-template-columns:240px 1fr;gap:36px;margin-top:44px}
+.fp{position:sticky;top:88px;height:fit-content}
+.fs{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--g100)}
+.fs:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ft-t{font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g600);margin-bottom:12px}
+.fo{display:flex;align-items:center;gap:10px;font-size:.875rem;color:var(--g500);cursor:pointer;padding:6px 8px;border-radius:var(--r8);transition:all .2s}
+.fo:hover{background:var(--g50);color:var(--b)}
+.fo.sel{color:var(--b);font-weight:600}
+.fchk{width:16px;height:16px;border:1.5px solid var(--g300);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:.55rem}
+.fo.sel .fchk{background:var(--b);border-color:var(--b);color:white}
+.prng{margin-top:8px}
+.prng input{width:100%;accent-color:var(--b);cursor:pointer}
+.prng-v{display:flex;justify-content:space-between;font-size:.78rem;color:var(--g400);margin-top:8px}
+.sb{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.sb-l{font-size:.875rem;color:var(--g400)}
+.sb-l strong{color:var(--b);font-weight:700}
+.sbs{display:flex;gap:6px}
+.srt{padding:7px 13px;border-radius:var(--r8);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s;background:white;border:1px solid var(--g200);color:var(--g500)}
+.srt.act{background:var(--b);color:white;border-color:var(--b)}
+.srch{display:flex;align-items:center;gap:10px;background:white;border:1.5px solid var(--g150);border-radius:var(--r12);padding:11px 16px;margin-bottom:24px;transition:border-color .2s}
+.srch:focus-within{border-color:var(--b)}
+.srch input{border:none;outline:none;font-size:.9rem;color:var(--b);background:transparent;width:100%;font-family:inherit}
+.srch input::placeholder{color:var(--g300)}
+
+/* ─── PRODUCT ─── */
+.prod-g{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding:56px 0 96px;align-items:start}
+.prod-gal{position:sticky;top:88px}
+.prod-main{width:100%;aspect-ratio:4/5;border-radius:var(--r24);overflow:hidden;margin-bottom:12px;background:var(--g50);position:relative;border:1px solid var(--g100)}
+.prod-main img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.prod-main:hover img{transform:scale(1.03)}
+.prod-thumbs{display:flex;gap:10px}
+.pt{width:72px;height:72px;background:var(--g50);border-radius:var(--r12);overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s;flex-shrink:0}
+.pt.act{border-color:var(--b)}
+.pt img{width:100%;height:100%;object-fit:cover}
+.bc{display:flex;align-items:center;gap:8px;font-size:.8125rem;color:var(--g400);margin-bottom:24px}
+.bc span{cursor:pointer;transition:color .2s}.bc span:hover{color:var(--b)}
+.bc-sep{color:var(--g300)}
+.prod-brand{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:var(--g100);color:var(--g600);margin-bottom:14px}
+.prod-n{font-family:var(--ff);font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;line-height:1.15;color:var(--b);margin-bottom:12px;letter-spacing:-.04em}
+.prod-pr{font-family:var(--ff);font-size:2.25rem;font-weight:800;color:var(--b);margin-bottom:10px;letter-spacing:-.04em}
+.prod-cb{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;font-size:.75rem;font-weight:700;margin-bottom:28px}
+.cnew{background:#dcfce7;color:#166534}.cgood{background:#dbeafe;color:#1e40af}.cfair{background:#fef9c3;color:#854d0e}
+.div{height:1px;background:var(--g100);margin:24px 0}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.si{padding:13px 15px;background:var(--g50);border-radius:var(--r8);border:1px solid var(--g100)}
+.sl2{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--g400);margin-bottom:3px}
+.sv{font-size:.875rem;font-weight:600;color:var(--b)}
+.prod-desc{font-size:.9rem;color:var(--g500);line-height:1.8;margin-bottom:28px}
+.prod-wa{width:100%;padding:17px 24px;background:#25D366;color:white;border-radius:var(--r12);font-size:1rem;font-weight:700;transition:all .25s;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.prod-wa:hover{background:#20bb59;transform:translateY(-2px);box-shadow:0 12px 32px rgba(37,211,102,.3)}
+
+/* ─── ABOUT ─── */
+.ab-hero{padding:72px 0 56px}
+.ab-g{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;padding:72px 0;border-top:1px solid var(--g100)}
+.ab-vals{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.av{padding:26px;border-radius:var(--r16);border:1px solid var(--g100);transition:all .3s}
+.av:hover{border-color:var(--g200);box-shadow:var(--sh1);transform:translateY(-2px)}
+.av-ic{font-size:1.4rem;margin-bottom:12px}
+.av-t{font-family:var(--ff);font-size:.9375rem;font-weight:700;margin-bottom:7px;letter-spacing:-.02em}
+.av-d{font-size:.8125rem;color:var(--g500);line-height:1.65}
+.store-card{background:var(--g50);border-radius:var(--r24);padding:44px;border:1px solid var(--g100);display:flex;flex-direction:column;gap:20px}
+.store-emoji{font-size:3.5rem;text-align:center;margin-bottom:4px}
+.store-name{font-family:var(--ff);font-size:1.35rem;font-weight:800;text-align:center;letter-spacing:-.03em}
+.store-info-row{display:flex;align-items:center;gap:12px;font-size:.875rem;color:var(--g600);padding:10px 0;border-bottom:1px solid var(--g200)}
+.store-info-row:last-child{border-bottom:none}
+
+/* ─── CONTACT ─── */
+.cont-g{display:grid;grid-template-columns:1fr 1fr;gap:72px;padding:56px 0 96px;align-items:start}
+.ci{display:flex;gap:16px;margin-bottom:28px;align-items:flex-start}
+.ci-ic{width:44px;height:44px;border-radius:var(--r12);background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;margin-top:2px}
+.ci-l{font-size:.65rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g400);margin-bottom:3px}
+.ci-v{font-size:.9375rem;color:var(--b);font-weight:600}
+.ci-s{font-size:.8125rem;color:var(--g400);margin-top:2px}
+.map-ph{height:200px;background:var(--g50);border-radius:var(--r16);border:1px solid var(--g100);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-top:36px}
+.cf{background:var(--g50);border-radius:var(--r24);padding:36px;border:1px solid var(--g100)}
+.cf-t{font-family:var(--ff);font-size:1.125rem;font-weight:700;margin-bottom:24px;letter-spacing:-.02em}
+.fg{margin-bottom:18px}
+.fl{display:block;font-size:.8125rem;font-weight:600;color:var(--g600);margin-bottom:7px}
+.fi{width:100%;padding:12px 16px;border:1.5px solid var(--g200);border-radius:var(--r8);font-size:.875rem;font-family:inherit;background:white;color:var(--b);transition:border-color .2s;outline:none}
+.fi:focus{border-color:var(--b)}
+.fi::placeholder{color:var(--g300)}
+textarea.fi{resize:vertical;min-height:110px;line-height:1.65}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ─── ADMIN ─── */
+.adm-l{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 68px - 33px)}
+.adm-sb{background:var(--g900);padding:28px 16px;position:sticky;top:101px;height:calc(100vh - 101px);overflow-y:auto}
+.adm-sb-logo{font-family:var(--ff);font-size:1.1rem;font-weight:800;color:white;margin-bottom:4px;letter-spacing:-.02em}
+.adm-sb-sub{font-size:.68rem;color:rgba(255,255,255,.25);margin-bottom:28px;letter-spacing:.04em;text-transform:uppercase}
+.adm-sb-sec{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:8px;padding:0 12px}
+.adm-ni{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r8);font-size:.85rem;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s;margin-bottom:2px}
+.adm-ni:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.adm-ni.act{background:rgba(255,255,255,.1);color:white;font-weight:600}
+.adm-ni-dot{width:5px;height:5px;border-radius:50%;background:var(--or);margin-left:auto;opacity:0}
+.adm-ni.act .adm-ni-dot{opacity:1}
+.adm-m{padding:36px;background:var(--g50);min-height:calc(100vh - 101px)}
+.adm-tb{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.adm-pt{font-family:var(--ff);font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.adm-ps{font-size:.875rem;color:var(--g400);margin-top:2px}
+.adm-sts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.adm-st{background:white;border-radius:var(--r12);padding:18px 22px;border:1px solid var(--g100)}
+.adm-st-l{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g400);margin-bottom:7px}
+.adm-st-v{font-family:var(--ff);font-size:1.75rem;font-weight:800;letter-spacing:-.04em}
+.adm-st-ch{font-size:.75rem;color:#16a34a;margin-top:3px;font-weight:500}
+.adm-cd{background:white;border-radius:var(--r16);padding:28px;border:1px solid var(--g100);margin-bottom:20px}
+.adm-cd-t{font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--g100);letter-spacing:-.02em}
+.adm-fg{margin-bottom:18px}
+.adm-fl{display:block;font-size:.78rem;font-weight:600;color:var(--g600);margin-bottom:7px}
+.adm-fi{width:100%;padding:10px 14px;border:1.5px solid var(--g200);border-radius:var(--r8);font-size:.875rem;font-family:inherit;background:white;color:var(--b);transition:border-color .2s;outline:none}
+.adm-fi:focus{border-color:var(--b)}
+.adm-sel{width:100%;padding:10px 14px;border:1.5px solid var(--g200);border-radius:var(--r8);font-size:.875rem;font-family:inherit;background:white;color:var(--b);cursor:pointer;outline:none;transition:border-color .2s}
+.adm-sel:focus{border-color:var(--b)}
+.adm-ta{width:100%;padding:10px 14px;border:1.5px solid var(--g200);border-radius:var(--r8);font-size:.875rem;font-family:inherit;background:white;color:var(--b);resize:vertical;min-height:90px;outline:none;transition:border-color .2s}
+.adm-ta:focus{border-color:var(--b)}
+.adm-fgr{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.up-z{border:2px dashed var(--g200);border-radius:var(--r12);padding:36px;text-align:center;cursor:pointer;transition:all .2s;background:var(--g50)}
+.up-z:hover{border-color:var(--g400);background:white}
+.up-ic{font-size:1.75rem;opacity:.4;margin-bottom:8px}
+.up-t{font-size:.875rem;color:var(--g500);font-weight:500}
+.up-s{font-size:.75rem;color:var(--g400);margin-top:4px}
+.ptbl{width:100%;border-collapse:collapse}
+.ptbl th{text-align:left;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g400);padding:10px 14px;border-bottom:1px solid var(--g100)}
+.ptbl td{padding:13px 14px;border-bottom:1px solid var(--g50);font-size:.875rem;vertical-align:middle}
+.ptbl tr:last-child td{border-bottom:none}
+.ptbl tr:hover td{background:var(--g50)}
+.tact{display:flex;gap:7px}
+.tbtn{padding:5px 11px;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s}
+.te{background:var(--bll);color:var(--bl);border:1px solid rgba(37,99,235,.12)}.te:hover{background:rgba(37,99,235,.15)}
+.td{background:#fff0f0;color:#dc2626;border:1px solid rgba(220,38,38,.12)}.td:hover{background:rgba(220,38,38,.15)}
+.tth{width:40px;height:40px;background:var(--g100);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.cpill{display:inline-flex;padding:2px 9px;border-radius:20px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.cnw{background:#dcfce7;color:#166534}.cgo{background:#dbeafe;color:#1e40af}.cfa{background:#fef9c3;color:#854d0e}
+.adm-btn{padding:10px 20px;border-radius:var(--r8);font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px}
+.adm-bp{background:var(--b);color:white}.adm-bp:hover{background:var(--b2)}
+.adm-bs{background:white;color:var(--b);border:1.5px solid var(--g200)}.adm-bs:hover{border-color:var(--g400);background:var(--g50)}
+.bk{display:inline-flex;align-items:center;gap:7px;font-size:.875rem;font-weight:500;color:var(--g500);cursor:pointer;padding:8px 0;margin-bottom:20px;transition:color .2s}
+.bk:hover{color:var(--b)}
+
+/* ─── BADGE ─── */
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.bdg-or{background:var(--orl);color:var(--or)}
+.bdg-bl{background:var(--bll);color:var(--bl)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-vis{display:none}
+  .why-g{grid-template-columns:1fr 1fr}
+  .sl{grid-template-columns:1fr}
+  .fp{position:static}
+  .prod-g{grid-template-columns:1fr;gap:36px}
+  .prod-gal{position:static}
+  .ft-g{grid-template-columns:1fr 1fr;gap:32px}
+  .adm-l{grid-template-columns:1fr}
+  .adm-sb{display:none}
+}
+@media(max-width:768px){
+  .nav-center,.nav-right{display:none}
+  .ham{display:flex}
+  .hero-stats{gap:24px}
+  .h1{font-size:2.4rem}
+  .cat-row,.s-cats,.ab-g,.cont-g,.fr2,.adm-fgr{grid-template-columns:1fr}
+  .why-g{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:1fr 1fr;gap:14px}
+  .ab-vals{grid-template-columns:1fr}
+  .ft-g{grid-template-columns:1fr;gap:20px}
+  .ft-bot{flex-direction:column;gap:8px;text-align:center}
+  .wa-sec{padding:44px 24px;margin:0 16px;border-radius:var(--r24)}
+  .adm-sts{grid-template-columns:1fr 1fr}
+  .sg{grid-template-columns:1fr}
+  .cat-cnt{height:240px;padding:24px}
+  .mob-menu{top:101px}
+}
+@media(max-width:480px){
+  .pgrid{grid-template-columns:1fr}
+  .hero-acts{flex-direction:column;align-items:stretch}
+  .btn-p,.btn-s,.btn-wa{width:100%;justify-content:center;text-align:center}
+  .hero-stats{flex-direction:row;flex-wrap:wrap}
+  .ct,.ct-sm{padding:0 16px}
+  .adm-m{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const {useState,useEffect,useRef,useMemo,useCallback}=React;
+const h=React.createElement;
+
+/* ── DATA ── */
+const IMG={
+  i15:'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&q=80&auto=format&fit=crop',
+  i14:'https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?w=500&q=80&auto=format&fit=crop',
+  i13:'https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=500&q=80&auto=format&fit=crop',
+  ise:'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&q=80&auto=format&fit=crop',
+  i12:'https://images.unsplash.com/photo-1574755393849-623942496936?w=500&q=80&auto=format&fit=crop',
+  sam:'https://images.unsplash.com/photo-1610945264803-c22b62d2a7b3?w=500&q=80&auto=format&fit=crop',
+  and:'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=500&q=80&auto=format&fit=crop',
+  ph3:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=500&q=80&auto=format&fit=crop',
+  ph4:'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=500&q=80&auto=format&fit=crop',
+  ph5:'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=500&q=80&auto=format&fit=crop',
+  hero:'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=90&auto=format&fit=crop',
+  cat_ip:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&q=80&auto=format&fit=crop',
+  cat_and:'https://images.unsplash.com/photo-1610945264803-c22b62d2a7b3?w=800&q=80&auto=format&fit=crop',
+};
+
+const PHONES=[
+  {id:1,name:'iPhone 15 Pro Max',brand:'Apple',cat:'iphone',price:109999,cond:'New',storage:'256GB',ram:'8GB',disp:'6.7" ProMotion OLED',cam:'48MP Triple + LiDAR',bat:'4422mAh',color:'Natural Titanium',img:IMG.i15,imgs:[IMG.i15,IMG.i14,IMG.i13],desc:'The latest iPhone 15 Pro Max with titanium frame, A17 Pro chip, and a groundbreaking 48MP camera system. USB-C connectivity and Action Button included. Sealed box with full warranty.',feat:true},
+  {id:2,name:'Samsung Galaxy S24 Ultra',brand:'Samsung',cat:'android',price:84999,cond:'New',storage:'256GB',ram:'12GB',disp:'6.8" Dynamic AMOLED',cam:'200MP Quad Camera',bat:'5000mAh',color:'Titanium Black',img:IMG.sam,imgs:[IMG.sam,IMG.and,IMG.ph3],desc:'The ultimate Android flagship with built-in S Pen, 200MP main camera, and Snapdragon 8 Gen 3. AI-powered features and 7 years of OS updates.',feat:true},
+  {id:3,name:'iPhone 14 Pro',brand:'Apple',cat:'iphone',price:74999,cond:'Used - Good',storage:'256GB',ram:'6GB',disp:'6.1" ProMotion OLED',cam:'48MP + 12MP + 12MP',bat:'3200mAh',color:'Space Black',img:IMG.i14,imgs:[IMG.i14,IMG.i15,IMG.ise],desc:'Excellent condition iPhone 14 Pro with Dynamic Island, Always-On display, and A16 Bionic. Battery at 89% health. Minor scuffs on frame only.',feat:true},
+  {id:4,name:'iPhone 13',brand:'Apple',cat:'iphone',price:49999,cond:'New',storage:'128GB',ram:'4GB',disp:'6.1" Super Retina XDR',cam:'12MP Dual',bat:'3227mAh',color:'Midnight',img:IMG.i13,imgs:[IMG.i13,IMG.i12,IMG.ise],desc:'Brand new sealed box iPhone 13 with ceramic shield display. All India warranty with GST invoice included. Lightning fast A15 chip.',feat:true},
+  {id:5,name:'Vivo V29 Pro 5G',brand:'Vivo',cat:'android',price:34999,cond:'New',storage:'256GB',ram:'12GB',disp:'6.78" Curved AMOLED',cam:'50MP Aura Portrait',bat:'4600mAh',color:'Himalayan Blue',img:IMG.and,imgs:[IMG.and,IMG.ph3,IMG.ph4],desc:'Vivo V29 Pro with curved glass display and stunning Aura Portrait lighting. 80W FlashCharge and smooth 120Hz display.',feat:false},
+  {id:6,name:'Oppo Reno 10 Pro+',brand:'Oppo',cat:'android',price:44999,cond:'New',storage:'256GB',ram:'16GB',disp:'6.74" AMOLED 120Hz',cam:'50MP + 64MP Periscope',bat:'4700mAh',color:'Glossy Purple',img:IMG.ph3,imgs:[IMG.ph3,IMG.and,IMG.ph5],desc:'Oppo Reno 10 Pro+ with 64MP periscope telephoto and Hasselblad colour calibration. Fastest charging in its segment at 100W.',feat:true},
+  {id:7,name:'iPhone SE 3rd Gen',brand:'Apple',cat:'iphone',price:31999,cond:'Used - Good',storage:'128GB',ram:'4GB',disp:'4.7" Retina HD IPS',cam:'12MP',bat:'2018mAh',color:'Midnight',img:IMG.ise,imgs:[IMG.ise,IMG.i12,IMG.i13],desc:'Compact iPhone SE with A15 Bionic and Touch ID. Great condition — display and cameras perfect. Ideal for those who prefer smaller phones.',feat:false},
+  {id:8,name:'Samsung Galaxy A55',brand:'Samsung',cat:'android',price:29999,cond:'New',storage:'128GB',ram:'8GB',disp:'6.6" Super AMOLED',cam:'50MP + 12MP + 5MP',bat:'5000mAh',color:'Awesome Iceblue',img:IMG.ph4,imgs:[IMG.ph4,IMG.sam,IMG.and],desc:'Mid-range powerhouse with IP67 rating, 5 years of OS updates, and OIS camera. The balanced phone for everyday use.',feat:false},
+  {id:9,name:'iPhone 12',brand:'Apple',cat:'iphone',price:34999,cond:'Used - Fair',storage:'64GB',ram:'4GB',disp:'6.1" OLED',cam:'12MP Dual',bat:'2815mAh',color:'Blue',img:IMG.i12,imgs:[IMG.i12,IMG.i13,IMG.ise],desc:'Value-priced iPhone 12 in fair condition. Display and cameras work perfectly. Minor body wear visible. Battery at 82% health.',feat:false},
+  {id:10,name:'Realme GT 6',brand:'Realme',cat:'android',price:27999,cond:'New',storage:'256GB',ram:'12GB',disp:'6.78" OLED 120Hz',cam:'50MP AI Triple',bat:'5500mAh',color:'Fluid Silver',img:IMG.ph5,imgs:[IMG.ph5,IMG.ph3,IMG.ph4],desc:'Performance-first Realme GT 6 with Snapdragon 8s Gen 3 and massive 5500mAh battery. 120W fast charge from 0 to 100 in 28 minutes.',feat:false},
+];
+
+const WA='8735855219';
+function waUrl(name,price){return`https://wa.me/91${WA}?text=${encodeURIComponent(name?`Hi Fonecart! I want to inquire about ${name} priced at ₹${Number(price).toLocaleString('en-IN')}.`:'Hi Fonecart! I\'d like to know more about your phones.')}`;}
+
+/* ── HOOKS ── */
+function useReveal(){
+  useEffect(()=>{
+    const els=document.querySelectorAll('.reveal');
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+    },{threshold:.12});
+    els.forEach(el=>io.observe(el));
+    return()=>io.disconnect();
+  });
+}
+
+function useScroll(){
+  const[sc,setSc]=useState(false);
+  useEffect(()=>{
+    const h=()=>setSc(window.scrollY>10);
+    window.addEventListener('scroll',h);return()=>window.removeEventListener('scroll',h);
+  },[]);
+  return sc;
+}
+
+/* ── IMAGE with fallback ── */
+function PhoneImg({src,alt,className,fallback}){
+  const[err,setErr]=useState(false);
+  return err||!src?
+    h('div',{className,style:{display:'flex',alignItems:'center',justifyContent:'center',fontSize:'5rem',lineHeight:1}},fallback||'📱'):
+    h('img',{src,alt,className,onError:()=>setErr(true)});
+}
+
+/* ── LOGO ── */
+function Logo({onClick}){
+  const[imgErr,setImgErr]=useState(false);
+  return h('div',{className:'nav-logo',onClick},
+    imgErr?
+      h('div',{className:'nav-logo-fallback'},
+        h('div',{className:'nav-logo-mark'},'F',h('em',null,'C')),
+        h('span',{className:'nav-logo-text'},'Fone',h('em',null,'cart'))
+      ):
+      h('img',{src:'logo.png',alt:'Fonecart',className:'nav-logo-img',onError:()=>setImgErr(true),
+        style:{height:'36px',width:'auto',objectFit:'contain'}})
+  );
+}
+
+/* ── NAV ── */
+function Nav({page,go}){
+  const[open,setOpen]=useState(false);
+  const sc=useScroll();
+  const links=[{l:'Home',p:'home'},{l:'Shop',p:'shop'},{l:'About',p:'about'},{l:'Contact',p:'contact'},{l:'Admin',p:'admin'}];
+  const nav=(p)=>{go(p);setOpen(false);};
+  return h('div',null,
+    h('div',{className:'ticker'},
+      h('div',{className:'ticker-track'},
+        [...Array(6)].flatMap((_,i)=>[
+          h('div',{key:`a${i}`,className:'ticker-item'},h('div',{className:'ticker-dot'}),h('span',null,'Free home delivery in Vadodara')),
+          h('div',{key:`b${i}`,className:'ticker-item'},h('div',{className:'ticker-dot'}),h('span',null,'30-day money back guarantee')),
+          h('div',{key:`c${i}`,className:'ticker-item'},h('div',{className:'ticker-dot'}),h('span',null,'Certified pre-owned phones')),
+          h('div',{key:`d${i}`,className:'ticker-item'},h('div',{className:'ticker-dot'}),h('span',null,'GST invoice on all purchases')),
+        ])
+      )
+    ),
+    h('nav',{className:`nav${sc?' scrolled':''}`},
+      h('div',{className:'nav-inner'},
+        h(Logo,{onClick:()=>nav('home')}),
+        h('div',{className:'nav-center'},links.map(l=>h('div',{key:l.p,className:`nav-lk${page===l.p?' active':''}`,onClick:()=>nav(l.p)},l.l))),
+        h('div',{className:'nav-right'},
+          h('a',{href:waUrl(''),target:'_blank'},h('div',{className:'nav-wa-btn'},'💬 WhatsApp')),
+          h('div',{className:'nav-cta',onClick:()=>nav('shop')},'Browse Phones')
+        ),
+        h('div',{className:`ham${open?' open':''}`,onClick:()=>setOpen(!open)},h('span'),h('span'),h('span'))
+      )
+    ),
+    open&&h('div',{className:'mob-menu open'},
+      links.map(l=>h('div',{key:l.p,className:`mob-lk${page===l.p?' active':''}`,onClick:()=>nav(l.p)},l.l,h('span',{style:{opacity:.3,fontSize:'.8rem'}},'→'))),
+      h('div',{className:'mob-divider'}),
+      h('a',{href:waUrl(''),target:'_blank',style:{display:'block'}},h('div',{className:'mob-wa'},'💬 WhatsApp — +91 87358 55219')),
+      h('div',{className:'mob-cta',onClick:()=>nav('shop')},'Browse All Phones')
+    )
+  );
+}
+
+/* ── PHONE CARD ── */
+function PCard({phone,onView}){
+  const condTag=phone.cond==='New'?'nw':phone.cond.includes('Good')?'gd':'fr';
+  const condLbl=phone.cond==='New'?'New':phone.cond.includes('Good')?'Good':'Fair';
+  return h('div',{className:'pcrd',onClick:onView},
+    h('div',{className:'pcrd-img'},
+      h('img',{src:phone.img,alt:phone.name,onError:e=>{e.target.parentNode.innerHTML=`<div style="font-size:4.5rem;line-height:1;display:flex;align-items:center;justify-content:center;width:100%;height:100%">📱</div>`}})
+    ),
+    h('div',{className:'pcrd-body'},
+      h('div',{className:'pcrd-tags'},
+        h('span',{className:'tg tg-br'},phone.brand),
+        h('span',{className:`tg tg-${condTag}`},condLbl)
+      ),
+      h('div',{className:'pcrd-n'},phone.name),
+      h('div',{className:'pcrd-sp'},`${phone.storage} · ${phone.disp} · ${phone.cam.split(' ')[0]} Cam`),
+      h('div',{className:'pcrd-ft'},
+        h('div',{className:'prc'},h('sup',null,'₹'),phone.price.toLocaleString('en-IN')),
+        h('a',{href:waUrl(phone.name,phone.price),target:'_blank',onClick:e=>e.stopPropagation()},
+          h('div',{className:'wa-b'},'💬')
+        )
+      )
+    )
+  );
+}
+
+/* ── HOME ── */
+function Home({go,setSP,setSC}){
+  useReveal();
+  const feat=PHONES.filter(p=>p.feat).slice(0,6);
+  return h('div',{className:'page-enter'},
+    h('section',{className:'hero'},
+      h('div',{className:'ct'},
+        h('div',{className:'hero-grid'},
+          h('div',null,
+            h('div',{className:'hero-tag anim-fu'},h('div',{className:'hero-tag-dot'}),'Open Today  10AM – 8PM · Vadodara'),
+            h('h1',{className:'h1 anim-fu-1'},'Your next phone,',h('br'),h('em',null,'starts here.')),
+            h('p',{className:'sub anim-fu-2'},'New & certified pre-owned smartphones at prices that make sense. Fully tested, quality guaranteed, delivered same day.'),
+            h('div',{className:'hero-acts anim-fu-3'},
+              h('button',{className:'btn-p btn-or',onClick:()=>go('shop')},'Browse Phones →'),
+              h('a',{href:waUrl(''),target:'_blank'},h('button',{className:'btn-s'},'💬 WhatsApp Us'))
+            ),
+            h('div',{className:'hero-stats anim-fu-4'},
+              h('div',null,h('div',{className:'stat-n'},'500+'),h('div',{className:'stat-l'},'Phones in stock')),
+              h('div',null,h('div',{className:'stat-n'},'4.9★'),h('div',{className:'stat-l'},'Customer rating')),
+              h('div',null,h('div',{className:'stat-n'},'3 Yrs'),h('div',{className:'stat-l'},'In Vadodara'))
+            )
+          ),
+          h('div',{className:'hero-vis'},
+            h('div',{className:'hero-bg-circle hero-bg-c1'}),
+            h('div',{className:'hero-bg-circle hero-bg-c2'}),
+            h('div',{className:'hero-phone'},
+              h('div',{className:'hero-phone-wrap'},
+                h('img',{src:IMG.hero,alt:'iPhone 15',style:{width:'100%',height:'100%',objectFit:'cover'},onError:e=>{e.target.style.display='none'}}),
+              )
+            ),
+            h('div',{className:'hero-pill hero-pill-1'},h('div',{className:'hero-pill-ico',style:{background:'#dcfce7'}},'✅'),h('div',null,h('div',{className:'hero-pill-t'},'Quality Checked'),h('div',{className:'hero-pill-s'},'Every device'))),
+            h('div',{className:'hero-pill hero-pill-2'},h('div',{className:'hero-pill-ico',style:{background:'#dbeafe'}},'📦'),h('div',null,h('div',{className:'hero-pill-t'},'Same-day Delivery'),h('div',{className:'hero-pill-s'},'Vadodara city'))),
+            h('div',{className:'hero-pill hero-pill-3'},h('div',{className:'hero-pill-ico',style:{background:'#fef9c3'}},'💬'),h('div',null,h('div',{className:'hero-pill-t'},'WhatsApp Support'),h('div',{className:'hero-pill-s'},'Instant replies')))
+          )
+        )
+      )
+    ),
+
+    h('section',{className:'sec-sm',style:{background:'#f9f9f9'}},
+      h('div',{className:'ct'},
+        h('div',{className:'sh'},
+          h('div',{className:'ey reveal'},'Categories'),
+          h('h2',{className:'h2 reveal reveal-1'},'What are you looking for?'),
+          h('p',{className:'sub reveal reveal-2',style:{margin:'0 auto'}},'Choose your platform and find the perfect device.')
+        ),
+        h('div',{className:'cat-row'},
+          h('div',{className:'cat-crd reveal reveal-1',onClick:()=>{setSC('iphone');go('shop')}},
+            h('img',{src:IMG.cat_ip,alt:'iPhone',className:'cat-bg',onError:e=>{e.target.style.display='none'}}),
+            h('div',{className:'cat-ov'}),
+            h('div',{className:'cat-cnt'},
+              h('div',{className:'cat-em'},'Apple'),
+              h('h3',{className:'cat-t'},'iPhone'),
+              h('div',{className:'cat-s'},'12 to 15 series — all models'),
+              h('div',{className:'cat-b'},'Shop iPhones ','→')
+            )
+          ),
+          h('div',{className:'cat-crd reveal reveal-2',onClick:()=>{setSC('android');go('shop')}},
+            h('img',{src:IMG.cat_and,alt:'Android',className:'cat-bg',onError:e=>{e.target.style.display='none'}}),
+            h('div',{className:'cat-ov',style:{background:'linear-gradient(160deg,rgba(249,115,22,.4) 0%,rgba(0,0,0,.5) 100%)'}}),
+            h('div',{className:'cat-cnt'},
+              h('div',{className:'cat-em'},'Android'),
+              h('h3',{className:'cat-t'},'Android'),
+              h('div',{className:'cat-s'},'Samsung, Vivo, Oppo & more'),
+              h('div',{className:'cat-b'},'Shop Android ','→')
+            )
+          )
+        )
+      )
+    ),
+
+    h('section',{className:'sec'},
+      h('div',{className:'ct'},
+        h('div',{className:'sh-flex'},
+          h('div',{className:'sh-l'},h('div',{className:'ey reveal'},'Featured'),h('h2',{className:'h2 reveal reveal-1'},'Top picks this week')),
+          h('button',{className:'btn-s reveal',style:{flexShrink:0,marginBottom:'8px'},onClick:()=>go('shop')},'View all →')
+        ),
+        h('div',{className:'pgrid'},feat.map((p,i)=>h('div',{key:p.id,className:`reveal reveal-${i+1}`},h(PCard,{phone:p,onView:()=>{setSP(p);go('product')}}))))
+      )
+    ),
+
+    h('section',{className:'sec',style:{background:'#f9f9f9'}},
+      h('div',{className:'ct'},
+        h('div',{className:'sh'},h('div',{className:'ey reveal'},'Why Fonecart'),h('h2',{className:'h2 reveal reveal-1'},'Built on trust, backed by quality')),
+        h('div',{className:'why-g'},
+          [{ic:'🔍',cl:'bl',t:'100-Point Inspection',d:'Every pre-owned device is tested across 100+ quality checkpoints before it ever reaches you.'},
+           {ic:'💰',cl:'or',t:'Best Price Promise',d:'We track market prices daily. Find a better deal in Vadodara? We\'ll match it — guaranteed.'},
+           {ic:'🛡️',cl:'dk',t:'30-Day Guarantee',d:'Not satisfied? Return within 30 days for a full refund or exchange. No questions asked.'},
+           {ic:'🚀',cl:'bl',t:'Same-Day Delivery',d:'Order before 4 PM and receive your phone same day anywhere in Vadodara city.'},
+           {ic:'🔧',cl:'or',t:'Free Setup Service',d:'Our team transfers your data, sets up apps, and gets your new phone ready to use — free.'},
+           {ic:'📋',cl:'dk',t:'GST Bill Included',d:'Every purchase comes with a proper GST invoice. Transparent pricing, zero hidden charges.'}
+          ].map((w,i)=>h('div',{key:w.t,className:`why-c reveal reveal-${i+1}`},
+            h('div',{className:`why-ic why-ic-${w.cl}`},w.ic),h('h3',{className:'why-t'},w.t),h('p',{className:'why-d'},w.d)
+          ))
+        )
+      )
+    ),
+
+    h('section',{className:'sec-sm'},
+      h('div',{className:'ct'},
+        h('div',{className:'wa-sec reveal'},
+          h('div',{className:'ey',style:{color:'var(--or)',justifyContent:'center'}},'Get in touch'),
+          h('h2',{className:'wa-sec-t'},'Have a phone in mind?'),
+          h('p',{className:'wa-sec-s'},'Chat with us on WhatsApp. We respond in minutes and help you find the best deal.'),
+          h('a',{href:waUrl(''),target:'_blank'},h('button',{className:'btn-wa'},'💬 Chat on WhatsApp'))
+        )
+      )
+    ),
+
+    h(Footer,{go})
+  );
+}
+
+/* ── SHOP ── */
+function Shop({go,setSP,initCat}){
+  useReveal();
+  const[cat,setCat]=useState(initCat||null);
+  const[brands,setBrands]=useState([]);
+  const[conds,setConds]=useState([]);
+  const[maxP,setMaxP]=useState(120000);
+  const[sort,setSort]=useState('latest');
+  const[q,setQ]=useState('');
+  const allBrands=[...new Set(PHONES.map(p=>p.brand))];
+  const allConds=['New','Used - Good','Used - Fair'];
+  const toggle=(arr,fn,v)=>arr.includes(v)?fn(arr.filter(x=>x!==v)):fn([...arr,v]);
+  const list=useMemo(()=>{
+    let r=PHONES.filter(p=>{
+      if(cat&&p.cat!==cat)return false;
+      if(brands.length&&!brands.includes(p.brand))return false;
+      if(conds.length&&!conds.includes(p.cond))return false;
+      if(p.price>maxP)return false;
+      if(q&&![p.name,p.brand].some(s=>s.toLowerCase().includes(q.toLowerCase())))return false;
+      return true;
+    });
+    if(sort==='asc')r=[...r].sort((a,b)=>a.price-b.price);
+    if(sort==='desc')r=[...r].sort((a,b)=>b.price-a.price);
+    return r;
+  },[cat,brands,conds,maxP,sort,q]);
+
+  function FO({label,val,arr,fn}){
+    const s=arr.includes(val);
+    return h('div',{className:`fo${s?' sel':''}`,onClick:()=>toggle(arr,fn,val)},
+      h('div',{className:'fchk'},s?'✓':''),label
+    );
+  }
+
+  if(!cat)return h('div',{className:'page-enter'},
+    h('div',{className:'shop-pg-hero'},
+      h('div',{className:'ct'},
+        h('div',{className:'ey reveal'},'All Phones'),
+        h('h1',{className:'h2 reveal reveal-1',style:{fontSize:'2.5rem'}},'Choose your category'),
+        h('p',{style:{color:'var(--g400)',fontSize:'1rem',maxWidth:'440px',marginTop:'8px',lineHeight:'1.7'},'className':'reveal reveal-2'},'New arrivals & certified pre-owned phones at fair prices.'),
+        h('div',{className:'s-cats',style:{marginTop:'36px'}},
+          [{id:'iphone',em:'📱',t:'iPhone',s:'Apple iOS ecosystem'},{id:'android',em:'🤖',t:'Android',s:'Samsung, Vivo, Oppo & more'}].map(c=>
+            h('div',{key:c.id,className:'scat reveal',onClick:()=>setCat(c.id)},
+              h('div',null,h('div',{className:'scat-em'},c.em),h('div',{className:'scat-t'},c.t),h('div',{className:'scat-s'},c.s)),
+              h('div',{className:'scat-ar'},'→')
+            )
+          )
+        )
+      )
+    ),
+    h('section',{className:'sec'},
+      h('div',{className:'ct'},
+        h('div',{className:'sh-flex'},h('div',{className:'sh-l'},h('h2',{className:'h2'},'All phones')),h('div',{className:'sbs'},['latest','asc','desc'].map(s=>h('div',{key:s,className:`srt${sort===s?' act':''}`,onClick:()=>setSort(s)},s==='latest'?'Latest':s==='asc'?'Price ↑':'Price ↓')))),
+        h('div',{className:'pgrid'},PHONES.map((p,i)=>h('div',{key:p.id,className:`reveal reveal-${Math.min(i%6+1,6)}`},h(PCard,{phone:p,onView:()=>{setSP(p);go('product')}}))))
+      )
+    ),
+    h(Footer,{go})
+  );
+
+  return h('div',{className:'page-enter'},
+    h('div',{className:'shop-pg-hero'},
+      h('div',{className:'ct'},
+        h('div',{className:'bk',onClick:()=>setCat(null)},'← All categories'),
+        h('div',{className:'ey'},cat==='iphone'?'Apple':'Android'),
+        h('h1',{className:'h2',style:{fontSize:'2.25rem',marginBottom:'4px'}},cat==='iphone'?'iPhones':'Android Phones'),
+        h('p',{style:{color:'var(--g400)',fontSize:'.875rem'}},`${list.length} phones available`)
+      )
+    ),
+    h('div',{className:'ct',style:{paddingTop:'36px',paddingBottom:'80px'}},
+      h('div',{className:'sl'},
+        h('aside',{className:'fp'},
+          h('div',{className:'fs'},h('div',{className:'ft-t'},'Brand'),
+            ['Apple','Samsung','Vivo','Oppo','Realme','Motorola'].filter(b=>cat==='iphone'?b==='Apple':b!=='Apple').map(b=>h(FO,{key:b,label:b,val:b,arr:brands,fn:setBrands}))
+          ),
+          h('div',{className:'fs'},h('div',{className:'ft-t'},'Condition'),allConds.map(c=>h(FO,{key:c,label:c,val:c,arr:conds,fn:setConds}))),
+          h('div',{className:'fs'},
+            h('div',{className:'ft-t'},'Max Price'),
+            h('div',{className:'prng'},
+              h('input',{type:'range',min:10000,max:120000,step:5000,value:maxP,onChange:e=>setMaxP(+e.target.value)}),
+              h('div',{className:'prng-v'},h('span','₹10k'),h('span',{style:{fontWeight:700,color:'var(--b)'}},`₹${(maxP/1000).toFixed(0)}k`))
+            )
+          ),
+          h('div',{className:'fs'},h('div',{className:'ft-t'},'Storage'),['64GB','128GB','256GB','512GB'].map(s=>h(FO,{key:s,label:s,val:s,arr:[],fn:()=>{}})))
+        ),
+        h('div',null,
+          h('div',{className:'srch'},h('span',{style:{color:'var(--g300)',flexShrink:0}},'🔍'),h('input',{placeholder:'Search phones...',value:q,onChange:e=>setQ(e.target.value)})),
+          h('div',{className:'sb'},h('span',{className:'sb-l'},h('strong',null,list.length),' phones'),h('div',{className:'sbs'},['latest','asc','desc'].map(s=>h('div',{key:s,className:`srt${sort===s?' act':''}`,onClick:()=>setSort(s)},s==='latest'?'Latest':s==='asc'?'Price ↑':'Price ↓')))),
+          list.length===0?h('div',{style:{textAlign:'center',padding:'80px 24px',color:'var(--g400)'}},h('div',{style:{fontSize:'3rem',marginBottom:'16px',opacity:.4}},'🔍'),h('p',null,'No phones match your filters')):
+          h('div',{className:'pgrid'},list.map((p,i)=>h('div',{key:p.id,className:`reveal reveal-${Math.min(i%6+1,6)}`},h(PCard,{phone:p,onView:()=>{setSP(p);go('product')}}))))
+        )
+      )
+    ),
+    h(Footer,{go})
+  );
+}
+
+/* ── PRODUCT ── */
+function Product({phone,go}){
+  useReveal();
+  const[ai,setAi]=useState(0);
+  if(!phone)return null;
+  const cc=phone.cond==='New'?'cnew':phone.cond.includes('Good')?'cgood':'cfair';
+  const specs=[{l:'Storage',v:phone.storage},{l:'RAM',v:phone.ram},{l:'Display',v:phone.disp},{l:'Camera',v:phone.cam.split('+')[0].trim()},{l:'Battery',v:phone.bat},{l:'Color',v:phone.color}];
+  return h('div',{className:'page-enter'},
+    h('div',{className:'ct'},
+      h('div',{className:'bc',style:{paddingTop:'24px'}},
+        h('span',{onClick:()=>go('home')},'Home'),h('span',{className:'bc-sep'},'›'),
+        h('span',{onClick:()=>go('shop')},'Shop'),h('span',{className:'bc-sep'},'›'),
+        h('span',{style:{color:'var(--b)',fontWeight:600}},phone.name)
+      ),
+      h('div',{className:'prod-g'},
+        h('div',{className:'prod-gal'},
+          h('div',{className:'prod-main'},
+            h('img',{src:phone.imgs[ai],alt:phone.name,style:{width:'100%',height:'100%',objectFit:'cover'},onError:e=>{e.target.style.display='none'}})
+          ),
+          h('div',{className:'prod-thumbs'},
+            phone.imgs.map((img,i)=>h('div',{key:i,className:`pt${ai===i?' act':''}`,onClick:()=>setAi(i)},
+              h('img',{src:img,alt:`View ${i+1}`,onError:e=>{e.target.style.display='none'}})
+            ))
+          )
+        ),
+        h('div',null,
+          h('div',{className:'prod-brand'},phone.brand),
+          h('h1',{className:'prod-n'},phone.name),
+          h('div',{className:'prod-pr'},'₹',phone.price.toLocaleString('en-IN')),
+          h('div',{className:`prod-cb ${cc}`},phone.cond==='New'?'🟢 ':phone.cond.includes('Good')?'🔵 ':'🟡 ',phone.cond),
+          h('div',{className:'div'}),
+          h('div',{style:{fontSize:'.72rem',fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--g400)',marginBottom:'12px'}},'Specifications'),
+          h('div',{className:'sg'},specs.map(s=>h('div',{key:s.l,className:'si'},h('div',{className:'sl2'},s.l),h('div',{className:'sv'},s.v)))),
+          h('p',{className:'prod-desc'},phone.desc),
+          h('div',{className:'div'}),
+          h('a',{href:waUrl(phone.name,phone.price),target:'_blank'},
+            h('button',{className:'prod-wa'},'💬 Inquire on WhatsApp')
+          ),
+          h('p',{style:{fontSize:'.75rem',color:'var(--g400)',marginTop:'10px',textAlign:'center'}},'Tap to open WhatsApp with a pre-filled message')
+        )
+      )
+    ),
+    h(Footer,{go})
+  );
+}
+
+/* ── ABOUT ── */
+function About({go}){
+  useReveal();
+  return h('div',{className:'page-enter'},
+    h('div',{className:'ab-hero'},
+      h('div',{className:'ct'},
+        h('div',{className:'ey reveal'},'Our Story'),
+        h('h1',{className:'h1 reveal reveal-1',style:{fontSize:'clamp(2.4rem,5vw,4rem)'}},'Vadodara\'s most ',h('em',null,'trusted'),' phone store.'),
+        h('p',{className:'sub reveal reveal-2'},'Started with one belief: everyone deserves a quality phone at a fair price. 3+ years and 3,000+ happy customers later — that belief drives us every day.')
+      )
+    ),
+    h('div',{className:'ct'},
+      h('div',{className:'ab-g'},
+        h('div',{className:'reveal'},
+          h('div',{className:'ey'},'What we do'),
+          h('h2',{className:'h2',style:{fontSize:'2rem'}},'More than a phone shop'),
+          h('p',{style:{color:'var(--g500)',lineHeight:1.8,marginBottom:'18px',fontSize:'.9375rem'}},'We source, test, and sell smartphones — new and pre-owned — from our trusted storefront in Vadodara. Unlike large chains, we take time to know every device we sell.'),
+          h('p',{style:{color:'var(--g500)',lineHeight:1.8,fontSize:'.9375rem'}},'Our pre-owned phones go through a 100-point inspection. Every sensor, button, camera, and connectivity feature is tested before listing.'),
+          h('div',{style:{display:'flex',gap:'28px',marginTop:'32px',paddingTop:'28px',borderTop:'1px solid var(--g100)'}},
+            [{n:'3,000+',l:'Customers'},{n:'4.9★',l:'Rating'},{n:'3 Yrs',l:'In business'}].map(s=>h('div',{key:s.l},h('div',{className:'stat-n',style:{fontSize:'1.75rem'}},s.n),h('div',{className:'stat-l'},s.l)))
+          )
+        ),
+        h('div',{className:'store-card reveal reveal-2'},
+          h('div',{className:'store-emoji'},'🏪'),
+          h('div',{className:'store-name',style:{fontFamily:'var(--ff)'}},'Fonecart'),
+          h('p',{style:{textAlign:'center',fontSize:'.875rem',color:'var(--g500)',marginBottom:'8px'}},'New & Pre-owned Smartphones'),
+          h('div',{style:{borderTop:'1px solid var(--g200)',paddingTop:'20px',display:'flex',flexDirection:'column',gap:'0'}},
+            [{ic:'⏰',v:'Mon – Sun  ·  10AM – 8PM'},{ic:'📞',v:'+91 87358 55219'},{ic:'📍',v:'Vadodara, Gujarat, India'},{ic:'✅',v:'GST Registered Business'}].map(r=>h('div',{key:r.v,className:'store-info-row'},h('span',null,r.ic),h('span',null,r.v)))
+          )
+        )
+      ),
+      h('div',{className:'ab-vals',style:{marginBottom:'80px'}},
+        [{ic:'📍',t:'Local & Trusted',d:'Born in Vadodara. We know our customers personally and take pride in every sale.'},{ic:'🔍',t:'Full Transparency',d:'Every detail disclosed upfront. Condition, history, battery health — all shared honestly.'},{ic:'🤝',t:'Fair Pricing',d:'No haggling pressure. The price you see is exactly what you pay, with invoice.'},{ic:'🏆',t:'Quality First',d:'We would rather not sell a phone than sell you a bad one. That\'s our promise.'}].map((v,i)=>
+          h('div',{key:v.t,className:`av reveal reveal-${i+1}`},h('div',{className:'av-ic'},v.ic),h('div',{className:'av-t'},v.t),h('div',{className:'av-d'},v.d))
+        )
+      )
+    ),
+    h(Footer,{go})
+  );
+}
+
+/* ── CONTACT ── */
+function Contact({go}){
+  useReveal();
+  const[f,sF]=useState({name:'',phone:'',msg:''});
+  const s=k=>e=>sF({...f,[k]:e.target.value});
+  return h('div',{className:'page-enter'},
+    h('div',{className:'ct'},
+      h('div',{style:{padding:'60px 0 20px'}},
+        h('div',{className:'ey reveal'},'Get in touch'),
+        h('h1',{className:'h2 reveal reveal-1',style:{fontSize:'2.5rem'}},'We\'d love to hear from you'),
+        h('p',{className:'sub reveal reveal-2',style:{marginTop:'8px'}},'Questions about a phone? WhatsApp us or fill the form below.')
+      ),
+      h('div',{className:'cont-g'},
+        h('div',{className:'reveal'},
+          [{ic:'💬',l:'WhatsApp',v:'+91 87358 55219',s:'Usually responds in under 5 minutes'},{ic:'⏰',l:'Hours',v:'Mon – Sun, 10AM to 8PM',s:'Open every day including holidays'},{ic:'📍',l:'Location',v:'Vadodara, Gujarat',s:'Exact address on WhatsApp'}].map(c=>
+            h('div',{key:c.l,className:'ci'},h('div',{className:'ci-ic'},c.ic),h('div',null,h('div',{className:'ci-l'},c.l),h('div',{className:'ci-v'},c.v),h('div',{className:'ci-s'},c.s)))
+          ),
+          h('a',{href:waUrl(''),target:'_blank'},h('button',{className:'btn-wa',style:{marginTop:'8px'}},'💬 Chat on WhatsApp')),
+          h('div',{className:'map-ph'},h('div',{style:{fontSize:'2rem',opacity:.35}},'🗺️'),h('div',{style:{fontSize:'.875rem',color:'var(--g400)'}},'Vadodara, Gujarat, India'),h('div',{style:{fontSize:'.75rem',color:'var(--g300)',marginTop:'4px'}},'Contact for exact address'))
+        ),
+        h('div',{className:'cf reveal reveal-2'},
+          h('div',{className:'cf-t'},'Send a message'),
+          h('div',{className:'fr2'},
+            h('div',{className:'fg'},h('label',{className:'fl'},'Name'),h('input',{className:'fi',placeholder:'Your name',value:f.name,onChange:s('name')})),
+            h('div',{className:'fg'},h('label',{className:'fl'},'Phone'),h('input',{className:'fi',placeholder:'+91 XXXXX',value:f.phone,onChange:s('phone')}))
+          ),
+          h('div',{className:'fg'},h('label',{className:'fl'},'Message'),h('textarea',{className:'fi',placeholder:'Which phone are you looking for?',value:f.msg,onChange:s('msg')})),
+          h('a',{href:waUrl(f.msg||'',0),target:'_blank',style:{display:'block'}},h('button',{className:'btn-p btn-or btn-full'},'Send via WhatsApp →'))
+        )
+      )
+    ),
+    h('div',{style:{height:'64px'}}),
+    h(Footer,{go})
+  );
+}
+
+/* ── ADMIN ── */
+function Admin(){
+  const[sec,setSec]=useState('dash');
+  const[phones,setPhones]=useState([...PHONES]);
+  const[form,setForm]=useState({name:'',brand:'Apple',cat:'iphone',price:'',cond:'New',storage:'128GB',ram:'4GB',disp:'',cam:'',bat:'',color:'',desc:''});
+  const sf=k=>e=>setForm({...form,[k]:e.target.value});
+  const add=()=>{if(!form.name||!form.price)return;setPhones([{...form,id:Date.now(),price:+form.price,img:IMG.i15,imgs:[IMG.i15],feat:false},...phones]);setForm({name:'',brand:'Apple',cat:'iphone',price:'',cond:'New',storage:'128GB',ram:'4GB',disp:'',cam:'',bat:'',color:'',desc:''});setSec('phones');};
+  const del=id=>setPhones(phones.filter(p=>p.id!==id));
+  const nav=[{id:'dash',ic:'📊',l:'Dashboard'},{id:'phones',ic:'📱',l:'Phones'},{id:'add',ic:'➕',l:'Add Phone'},{id:'settings',ic:'⚙️',l:'Settings'}];
+  return h('div',{className:'page-enter'},
+    h('div',{className:'adm-l'},
+      h('aside',{className:'adm-sb'},
+        h('div',{className:'adm-sb-logo'},'Fonecart'),
+        h('div',{className:'adm-sb-sub'},'Admin Panel'),
+        nav.map(n=>h('div',{key:n.id,className:`adm-ni${sec===n.id?' act':''}`,onClick:()=>setSec(n.id)},h('span',null,n.ic),n.l,h('div',{className:'adm-ni-dot'})))
+      ),
+      h('main',{className:'adm-m'},
+        sec==='dash'&&h('div',null,
+          h('div',{className:'adm-tb'},h('div',null,h('div',{className:'adm-pt'},'Dashboard'),h('div',{className:'adm-ps'},'Welcome back'))),
+          h('div',{className:'adm-sts'},
+            [{l:'Total Phones',v:phones.length,ch:'+2 this week'},{l:'iPhones',v:phones.filter(p=>p.cat==='iphone').length,ch:''},{l:'Android',v:phones.filter(p=>p.cat==='android').length,ch:''},{l:'New Stock',v:phones.filter(p=>p.cond==='New').length,ch:''}].map(s=>
+              h('div',{key:s.l,className:'adm-st'},h('div',{className:'adm-st-l'},s.l),h('div',{className:'adm-st-v'},s.v),s.ch&&h('div',{className:'adm-st-ch'},s.ch))
+            )
+          ),
+          h('div',{className:'adm-cd'},
+            h('div',{className:'adm-cd-t'},'Recent inventory'),
+            h('table',{className:'ptbl'},
+              h('thead',null,h('tr',null,['','Name','Price','Category','Condition','Actions'].map(c=>h('th',{key:c},c)))),
+              h('tbody',null,phones.slice(0,5).map(p=>h('tr',{key:p.id},
+                h('td',null,h('div',{className:'tth'},h('img',{src:p.img,style:{width:'100%',height:'100%',objectFit:'cover',borderRadius:'8px'},onError:e=>{e.target.style.display='none'}}))),
+                h('td',null,h('span',{style:{fontWeight:600,fontFamily:'var(--ff)'}},p.name)),
+                h('td',null,'₹',p.price.toLocaleString('en-IN')),
+                h('td',null,h('span',{className:`bdg bdg-${p.cat==='iphone'?'bl':'or'}`},p.cat==='iphone'?'iPhone':'Android')),
+                h('td',null,h('span',{className:`cpill ${p.cond==='New'?'cnw':p.cond.includes('Good')?'cgo':'cfa'}`},p.cond)),
+                h('td',null,h('div',{className:'tact'},h('button',{className:'tbtn te'},'Edit'),h('button',{className:'tbtn td',onClick:()=>del(p.id)},'Delete')))
+              )))
+            )
+          )
+        ),
+        sec==='phones'&&h('div',null,
+          h('div',{className:'adm-tb'},h('div',null,h('div',{className:'adm-pt'},'Manage Phones'),h('div',{className:'adm-ps'},`${phones.length} phones`)),h('button',{className:'adm-btn adm-bp',onClick:()=>setSec('add')},'+ Add Phone')),
+          h('div',{className:'adm-cd'},
+            h('table',{className:'ptbl'},
+              h('thead',null,h('tr',null,['','Name','Brand','Price','Condition','Cat.','Actions'].map(c=>h('th',{key:c},c)))),
+              h('tbody',null,phones.map(p=>h('tr',{key:p.id},
+                h('td',null,h('div',{className:'tth'},h('img',{src:p.img,style:{width:'100%',height:'100%',objectFit:'cover',borderRadius:'8px'},onError:e=>{e.target.style.display='none'}}))),
+                h('td',null,h('span',{style:{fontWeight:600,fontFamily:'var(--ff)',fontSize:'.8125rem'}},p.name)),
+                h('td',null,h('span',{style:{fontSize:'.8125rem'}},p.brand)),
+                h('td',null,h('span',{style:{fontWeight:700}},'₹',p.price.toLocaleString('en-IN'))),
+                h('td',null,h('span',{className:`cpill ${p.cond==='New'?'cnw':p.cond.includes('Good')?'cgo':'cfa'}`},p.cond)),
+                h('td',null,h('span',{className:`bdg bdg-${p.cat==='iphone'?'bl':'or'}`,style:{fontSize:'.6rem'}},p.cat==='iphone'?'iOS':'Droid')),
+                h('td',null,h('div',{className:'tact'},h('button',{className:'tbtn te'},'Edit'),h('button',{className:'tbtn td',onClick:()=>del(p.id)},'Delete')))
+              )))
+            )
+          )
+        ),
+        sec==='add'&&h('div',null,
+          h('div',{className:'adm-tb'},h('div',null,h('div',{className:'adm-pt'},'Add New Phone'),h('button',{className:'adm-btn adm-bs',style:{marginTop:'8px'},onClick:()=>setSec('phones')},'← Back'))),
+          h('div',{className:'adm-cd'},
+            h('div',{className:'adm-cd-t'},'Phone Details'),
+            h('div',{className:'adm-fgr'},
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Name'),h('input',{className:'adm-fi',placeholder:'iPhone 15 Pro',value:form.name,onChange:sf('name')})),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Price (₹)'),h('input',{className:'adm-fi',type:'number',placeholder:'89999',value:form.price,onChange:sf('price')})),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Category'),h('select',{className:'adm-sel',value:form.cat,onChange:sf('cat')},h('option',{value:'iphone'},'iPhone'),h('option',{value:'android'},'Android'))),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Brand'),h('select',{className:'adm-sel',value:form.brand,onChange:sf('brand')},['Apple','Samsung','Vivo','Oppo','Realme','OnePlus','Xiaomi','Motorola'].map(b=>h('option',{key:b,value:b},b)))),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Condition'),h('select',{className:'adm-sel',value:form.cond,onChange:sf('cond')},['New','Used - Good','Used - Fair'].map(c=>h('option',{key:c,value:c},c)))),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Storage'),h('select',{className:'adm-sel',value:form.storage,onChange:sf('storage')},['64GB','128GB','256GB','512GB'].map(s=>h('option',{key:s,value:s},s)))),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'RAM'),h('input',{className:'adm-fi',placeholder:'8GB',value:form.ram,onChange:sf('ram')})),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Display'),h('input',{className:'adm-fi',placeholder:'6.1" OLED',value:form.disp,onChange:sf('disp')})),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Camera'),h('input',{className:'adm-fi',placeholder:'50MP Main',value:form.cam,onChange:sf('cam')})),
+              h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Battery'),h('input',{className:'adm-fi',placeholder:'4500mAh',value:form.bat,onChange:sf('bat')})),
+            ),
+            h('div',{className:'adm-fg'},h('label',{className:'adm-fl'},'Description'),h('textarea',{className:'adm-ta',placeholder:'Phone description...',value:form.desc,onChange:sf('desc')}))
+          ),
+          h('div',{className:'adm-cd'},h('div',{className:'adm-cd-t'},'Upload Images'),h('div',{className:'up-z'},h('div',{className:'up-ic'},'📁'),h('div',{className:'up-t'},'Drop images here or click to upload'),h('div',{className:'up-s'},'PNG, JPG up to 10MB · Multiple uploads allowed · Previous uploads preserved'))),
+          h('div',{className:'adm-cd'},h('div',{className:'adm-cd-t'},'Product Video (optional)'),h('div',{className:'up-z'},h('div',{className:'up-ic'},'🎥'),h('div',{className:'up-t'},'Upload product video'),h('div',{className:'up-s'},'MP4 up to 50MB'))),
+          h('div',{style:{display:'flex',gap:'10px',paddingBottom:'40px'}},h('button',{className:'adm-btn adm-bp',onClick:add},'✓ Save Phone'),h('button',{className:'adm-btn adm-bs',onClick:()=>setSec('phones')},'Cancel'))
+        ),
+        sec==='settings'&&h('div',null,
+          h('div',{className:'adm-tb'},h('div',null,h('div',{className:'adm-pt'},'Settings'))),
+          h('div',{className:'adm-cd'},h('div',{className:'adm-cd-t'},'Store Information'),h('div',{className:'adm-fgr'},[{l:'Store Name',v:'Fonecart'},{l:'WhatsApp',v:'8735855219'},{l:'City',v:'Vadodara'},{l:'Hours',v:'10AM – 8PM'}].map(f=>h('div',{key:f.l,className:'adm-fg'},h('label',{className:'adm-fl'},f.l),h('input',{className:'adm-fi',defaultValue:f.v})))),h('button',{className:'adm-btn adm-bp',style:{marginTop:'8px'}},'Save Changes'))
+        )
+      )
+    )
+  );
+}
+
+/* ── FOOTER ── */
+function Footer({go}){
+  return h('footer',{className:'ft'},
+    h('div',{className:'ct'},
+      h('div',{className:'ft-g'},
+        h('div',null,
+          h('div',{className:'ft-br'},'Fone',h('em',null,'cart')),
+          h('p',{className:'ft-d'},'Vadodara\'s trusted destination for new & certified pre-owned smartphones. Quality guaranteed.'),
+          h('a',{href:waUrl(''),target:'_blank',style:{display:'inline-block',marginTop:'24px'}},
+            h('div',{style:{display:'flex',alignItems:'center',gap:'8px',background:'#25D366',color:'white',padding:'10px 18px',borderRadius:'10px',fontSize:'.8125rem',fontWeight:700,cursor:'pointer'}},'💬 WhatsApp Us')
+          )
+        ),
+        ...([['Company',['About Us','Our Story','Contact Us','Admin Panel']],['iPhones',['iPhone 15','iPhone 14','iPhone 13','iPhone SE']],['Android',['Samsung','Vivo','Oppo','Realme']]]).map(([title,links])=>
+          h('div',{key:title},h('div',{className:'ft-h'},title),h('div',{className:'ft-ls'},links.map(l=>h('div',{key:l,className:'ft-lk'},l))))
+        )
+      ),
+      h('div',{className:'ft-bot'},
+        h('div',{className:'ft-cp'},'© 2024 ',h('em',null,'Fonecart'),'. All rights reserved.'),
+        h('div',{className:'ft-badges'},h('div',{className:'ft-badge'},'Vadodara'),h('div',{className:'ft-badge'},'GST Reg'))
+      )
+    )
+  );
+}
+
+/* ── APP ── */
+function App(){
+  const[page,setPage]=useState('home');
+  const[sp,setSP]=useState(null);
+  const[sc,setSC]=useState(null);
+  const go=p=>{setPage(p);window.scrollTo({top:0,behavior:'smooth'});};
+  const setShopCat=cat=>{setSC(cat);go('shop');};
+  return h('div',null,
+    h(Nav,{page,go}),
+    page==='home'&&h(Home,{go,setSP,setSC:setShopCat}),
+    page==='shop'&&h(Shop,{go,setSP,initCat:sc}),
+    page==='product'&&h(Product,{phone:sp,go}),
+    page==='about'&&h(About,{go}),
+    page==='contact'&&h(Contact,{go}),
+    page==='admin'&&h(Admin)
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(h(App));
+</script>
+</body>
+</html>
